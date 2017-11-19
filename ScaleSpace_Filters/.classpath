@@ -12,10 +12,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ij"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/IJ"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ACTIVE_SEG"/>
-	<classpathentry kind="lib" path="/home/mg/Desktop/GOOGLESUMMERCODE2016/jars/jfreechart-1.0.19.jar"/>
-	<classpathentry kind="lib" path="/home/mg/Desktop/GOOGLESUMMERCODE2016/jars/jcommon-1.0.23.jar"/>
-	<classpathentry kind="lib" path="/home/mg/Downloads/ACTIVE_SEGM/ImageJ/ij.jar"/>
+	<classpathentry kind="lib" path="C:/github/GOOGLESUMMERCODE2016A/jars/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="C:/github/GOOGLESUMMERCODE2016A/jars/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

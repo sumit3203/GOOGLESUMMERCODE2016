@@ -33,7 +33,7 @@ import dsp.Conv;
  * 				
  *   
  * 
- * @author Dimiter Prodanov, IMEC , Sumit Kumar Vohra , Kuleuven
+ * @author Dimiter Prodanov, IMEC , Sumit Kumar Vohra , KULeuven
  *
  *
  * @contents
@@ -68,13 +68,13 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 
 	private int nPasses=1;
 	private int pass;
-	private int position_id;
+
 
 	public final static String SIGMA="LOG_sigma",MAX_LEN="G_MAX",FULL_OUTPUT="Full_out",LEN="G_len";
 
 	private static int sz= Prefs.getInt(LEN, 2);
 	private  int max_sz= Prefs.getInt(MAX_LEN, 8);
-	private boolean isEnabled=true;
+	
 
 	private float[][] kernel=null;
 
@@ -91,6 +91,10 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 
 	/* NEW VARIABLES*/
 
+    private boolean isEnabled=true;
+    
+	private int position_id=1;
+	
 	/** A string key identifying this factory. */
 	private final  String FILTER_KEY = "ALOG";
 
@@ -101,7 +105,7 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 	private Map< String, String > settings= new HashMap<String, String>();
 	
 	/** It is the result stack*/
-	private ImageStack imageStack;
+	private ImageStack imageStack=null;
 
 	/**
 	 * This method is to setup the PlugInFilter using image stored in ImagePlus 
@@ -125,9 +129,11 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 	 */
 	private Calibration cal=null;
 	
+	/*
 	public void initialseimageStack(ImageStack img){
 		this.imageStack = img;
 	}
+	*/
 	
 	/*
 	 * (non-Javadoc)
@@ -137,7 +143,6 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 	public void run(ImageProcessor ip) {
 		int r = (sz-1)/2;
 		GScaleSpace sp=new GScaleSpace(r);
-
 
 		imageStack=new ImageStack(ip.getWidth(),ip.getHeight());
 
@@ -150,11 +155,9 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 
 	/**
 	 * 
-	 * This method Apply filter to input image (in place)
-	 * @param inputImage input image
-	 * @param size kernel size (it must be odd)
-	 * @param nAngles number of angles
-	 * @return false if error
+	 * This method applies filter to input image (in place)
+	 * @param ImageProcessor input image
+	 * @return Pair
 	 */
 	@Override
 	public Pair<Integer,ImageStack> applyFilter(ImageProcessor ip){
@@ -164,7 +167,7 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 			GScaleSpace sp=new GScaleSpace(sigma);
 			imageStack = filter(ip.duplicate(), sp,sigma,imageStack);
 		}
-		initialseimageStack(imageStack);
+		setImageStack(imageStack);
 		return new Pair<Integer,ImageStack>(index, imageStack);
 	}
 	
@@ -178,7 +181,7 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 	 * @param sp gaussian scale space
 	 * @param sigma filter sigma
 	 */
-	private ImageStack filter(ImageProcessor ip,GScaleSpace sp, float sigma, ImageStack imageStack){
+	private ImageStack filter(ImageProcessor ip, GScaleSpace sp, float sigma, ImageStack imageStack){
 
 		ip.snapshot();
 
@@ -395,7 +398,6 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 
 	@Override
 	public boolean reset() {
-		// TODO Auto-generated method stub
 		sz= Prefs.getInt(LEN, 2);
 		max_sz= Prefs.getInt(MAX_LEN, 8);
 		fulloutput= Prefs.getBoolean(FULL_OUTPUT, true);
@@ -432,6 +434,7 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 	public int getSize(){
 		return imageStack.getSize();
 	}
+	
 	/**
 	 * Get slice label
 	 * @param index slice index (from 1 to max size)
@@ -441,6 +444,7 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 	public String getSliceLabel(int index){
 		return imageStack.getSliceLabel(index);
 	}
+	
 	/**
 	 * Get stack height
 	 * @return stack height
@@ -449,6 +453,7 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 	public int getHeight(){
 		return imageStack.getHeight();
 	}
+	
 	/**
 	 * Get stack width
 	 * @return stack width
@@ -492,13 +497,11 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return isEnabled;
 	}
 
 	@Override
 	public void setEnabled(boolean isEnabled) {
-		// TODO Auto-generated method stub
 		this.isEnabled= isEnabled;
 	}
 
@@ -515,13 +518,11 @@ public class ALoG_Filter_ implements ExtendedPlugInFilter, DialogListener, IFilt
 
 	@Override
 	public void updatePosition(int position) {
-		// TODO Auto-generated method stub
 		this.position_id=position;
 	}
 
 	@Override
 	public int getDegree() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
